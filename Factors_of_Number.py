@@ -8,5 +8,4 @@ def print_factors(x):
            print(i, end=', ')
 
 num = int(input())
-
 print_factors(num)
