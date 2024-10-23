@@ -1,7 +1,7 @@
 # PYTHON PROGRAM REPOSITORY!
 
-[![GitHub issues](https://img.shields.io/github/issues/Rishi098/Hacktoberfest-2024?logo=github)](https://github.com/Rishi098/Hacktoberfest-2024/issues)
-[![GitHub stars](https://img.shields.io/github/stars/Rishi098/Hacktoberfest-2024?style=social)](https://github.com/Rishi098/Hacktoberfest-2024/stargazers)
+[![GitHub issues](https://img.shields.io/github/issues/Rishi098/Hacktoberfest-2024?logo=github)](https://github.com/Rishi098/Python_Programs/issues)
+[![GitHub stars](https://img.shields.io/github/stars/Rishi098/Hacktoberfest-2024?style=social)](https://github.com/Rishi098/Python_Programs/stargazers)
 [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FRishi098%2FHacktoberfest-2024&count_bg=%23DD8524&title_bg=%23555555&icon=github.svg&icon_color=%23E7E7E7&title=visitors&edge_flat=false)](https://github.com/Rishi098/HACKTOBERFEST2021_PATTERN) 
 [![GitHub forks](https://img.shields.io/github/forks/Rishi098/Hacktoberfest-2021?style=social&logo=git)](https://github.com/Rishi098/Hacktoberfest-2024/network/)
 ![Author](https://img.shields.io/badge/Owner-Rishi098-blue)
