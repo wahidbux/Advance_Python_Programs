@@ -5,8 +5,7 @@ def print_factors(x):
    print("The factors of",x,"are:")
    for i in range(1, x + 1):
        if x % i == 0:
-           print(i)
+           print(i, end=', ')
 
-num = 320
-
+num = int(input())
 print_factors(num)
