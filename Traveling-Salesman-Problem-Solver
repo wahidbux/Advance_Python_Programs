@@ -1,0 +1,127 @@
+import sys
+import itertools
+
+def tsp_dp(dist_matrix):
+    n = len(dist_matrix)
+    if n <= 0:
+        return None, float('inf')
+    
+    # dp[mask][i] = minimum cost to visit subset mask ending at city i
+    dp = [[float('inf')] * n for _ in range(1 << n)]
+    dp[1][0] = 0  # Start at city 0, mask with only 0 visited
+    
+    # prev[mask][i] to reconstruct path
+    prev = [[-1] * n for _ in range(1 << n)]
+    
+    for mask in range(1 << n):
+        for u in range(n):
+            if dp[mask][u] == float('inf'):
+                continue
+            for v in range(n):
+                if mask & (1 << v):
+                    continue  # Already visited
+                new_mask = mask | (1 << v)
+                new_cost = dp[mask][u] + dist_matrix[u][v]
+                if new_cost < dp[new_mask][v]:
+                    dp[new_mask][v] = new_cost
+                    prev[new_mask][v] = u
+    
+    # Find minimum cost to return to 0
+    min_cost = float('inf')
+    end_mask = (1 << n) - 1
+    for i in range(1, n):
+        if dist_matrix[i][0] != float('inf'):
+            total_cost = dp[end_mask][i] + dist_matrix[i][0]
+            if total_cost < min_cost:
+                min_cost = total_cost
+    
+    if min_cost == float('inf'):
+        return None, float('inf')
+    
+    # Reconstruct path
+    path = []
+    current_mask = end_mask
+    current_city = min(range(1, n), key=lambda i: dp[end_mask][i] + dist_matrix[i][0])
+    path.append(current_city)
+    
+    while current_city != 0:
+        prev_city = prev[current_mask][current_city]
+        path.append(prev_city)
+        current_mask ^= (1 << current_city)
+        current_city = prev_city
+    
+    path.reverse()
+    path.append(0)  # Close the cycle
+    
+    return path, min_cost
+
+def main():
+    print("🗺️  Welcome to the Traveling Salesman Problem Solver! 🗺️")
+    print("This solves the TSP using Dynamic Programming (Held-Karp algorithm).")
+    print("It's efficient for small N (up to ~20 cities). For larger, it's NP-hard!")
+    print("\nInstructions:")
+    print("- Enter number of cities (N): 2 ≤ N ≤ 15 recommended.")
+    print("- Then enter N x N distance matrix (integers, use INF=99999 for no direct path).")
+    print("- Diagonal should be 0 (distance to self).")
+    print("- The program finds the shortest tour visiting all cities exactly once and returning to start.\n")
+    
+    try:
+        n = int(input("Enter number of cities (N): "))
+        if n < 2 or n > 20:
+            print("Please choose 2 ≤ N ≤ 20 for practicality.")
+            return
+        
+        print(f"\nEnter {n} x {n} distance matrix row by row:")
+        dist_matrix = []
+        INF = 99999  # Use this for unreachable
+        
+        for i in range(n):
+            row_str = input(f"Row {i+1} (space-separated, {n} numbers): ").strip()
+            row = list(map(int, row_str.split()))
+            if len(row) != n:
+                raise ValueError("Invalid row length")
+            # Ensure diagonal is 0
+            row[i] = 0
+            dist_matrix.append(row)
+        
+        print("\nDistance Matrix:")
+        for row in dist_matrix:
+            print(" ".join(f"{x:5d}" for x in row))
+        
+        print("\nSolving TSP... (This may take a moment for larger N)")
+        
+        path, cost = tsp_dp(dist_matrix)
+        
+        if path is None:
+            print("❌ No valid tour found (graph not connected?).")
+        else:
+            print(f"\n✅ Optimal Tour: {' -> '.join(map(str, path))} -> {path[0]}")
+            print(f"Total Distance: {cost}")
+            
+            # Verify the cost
+            verify_cost = sum(dist_matrix[path[i]][path[i+1]] for i in range(len(path)-1)) + dist_matrix[path[-1]][path[0]]
+            print(f"(Verified: {verify_cost})")
+            
+            # Fun: Show all permutations cost for small N to compare brute force
+            if n <= 8:
+                print("\n🔍 Brute Force Comparison (for fun):")
+                min_brute = float('inf')
+                best_perm = None
+                for perm in itertools.permutations(range(1, n)):
+                    full_path = [0] + list(perm) + [0]
+                    brute_cost = sum(dist_matrix[full_path[i]][full_path[i+1]] for i in range(n))
+                    if brute_cost < min_brute:
+                        min_brute = brute_cost
+                        best_perm = full_path
+                print(f"Brute Force Min: {min_brute} | Path: {' -> '.join(map(str, best_perm))}")
+                print(f"DP matches Brute: {min_brute == cost}")
+        
+    except ValueError as e:
+        print(f"❌ Input error: {e}")
+    except Exception as e:
+        print(f"❌ Unexpected error: {e}")
+    
+    print("\nThanks for using TSP Solver! Run again for another puzzle. 🚀")
+
+if __name__ == "__main__":
+    main()
