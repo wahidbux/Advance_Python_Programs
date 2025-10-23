@@ -1,0 +1,17 @@
+import express from "express";
+import multer from "multer";
+import fs from "fs";
+
+const upload = multer({ dest: "uploads/" });
+const app = express();
+
+app.post("/upload", upload.single("file"), (req, res) => {
+  res.json({ filename: req.file.filename });
+});
+
+app.get("/files", (req, res) => {
+  const files = fs.readdirSync("uploads");
+  res.json(files);
+});
+
+app.listen(3007);
